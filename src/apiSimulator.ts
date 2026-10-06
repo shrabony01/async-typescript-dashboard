@@ -23,7 +23,7 @@ export function fetchProductCatalog(){
                     {id:2,name:'headphones',price:200}
                 ]);
             }else{
-                reject('failed to fetch product catalog');
+                reject(new NetworkError("Failed to fetch product catalog: Connection timed out"));
             }
 
         },1000);
@@ -39,7 +39,7 @@ export const fetchProductReview=(productId:number) => {
                     {reviewId:102,rating:4,comment:'Good value for money'}
                 ]);
             }else{
-                reject(`Failed to fetch reviews for product ID ${productId}`);
+                reject(new DataError(`Failed to fetch reviews for product ID ${productId}: Corrupted payload`));
             }
         },1500);
      });
@@ -55,7 +55,7 @@ export const fetchSalesReport = () =>{
                     averagePrice : 168.75
                 });
             } else{
-                reject ('Failed to fetch sales report');
+                reject (new NetworkError("Failed to fetch sales report: Server unreachable"));
             }
         },1000);
     });
