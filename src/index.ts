@@ -1,23 +1,30 @@
 import {
     fetchProductCatalog,
     fetchProductReview,
-    fetchSalesReport
+    fetchSalesReport,
+    NetworkError,
+    DataError
 } from "./apiSimulator.js";
 
 console.log('=== Starting E-Commerce Dashboard ===');
 
 fetchProductCatalog()
-.then((products) => {
+.then((products:any) => {
     console.log('\n📦 Products retrieved:',products);
 
     //fetch review for each products
-    const reviewPromises = products.map((product) => {
+    const reviewPromises = products.map((product:any) => {
         return fetchProductReview(product.id)
         .then((reveiws) => {
-            console.log(`\n⭐ Reviews for \({product.name} (ID:\){product.id}):`, reveiws);
+            console.log(`\n⭐ Reviews for $({product.name} (ID:${product.id}):`, reveiws);
         })
         .catch((error) => {
-            console.error(`⚠️ Error fetching reviews for ${product.name}:`, error);
+            if (error instanceof DataError) {
+            console.error(`[Data Issue] $({error.name}:${error.message}`);
+          } else {
+            console.error(`[Review Error]:`, error);
+          }
+            
         });
     });
     // wait for all reviewa to finish before fetching sales report
@@ -31,7 +38,14 @@ fetchProductCatalog()
     console.log("\n📊 Sales Report retrieved:", salesReport);
   })
   .catch((error) => {
-    console.error("\n❌ Critical Dashboard Error:", error);
+    if (error instanceof NetworkError) {
+      console.error(`\n🌐 [Network Failure] ${error.name}:${error.message}`);
+    } else if (error instanceof DataError) {
+      console.error(`\n📄 [Data Format Failure] ${error.name}:${error.message}`);
+    } else {
+      console.error("\n❌ General Dashboard Error:", error);
+    }
+    
   })
   .finally(() => {
     console.log("\n✅ All API calls have been attempted.");
