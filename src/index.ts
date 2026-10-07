@@ -16,11 +16,11 @@ fetchProductCatalog()
     const reviewPromises = products.map((product:any) => {
         return fetchProductReview(product.id)
         .then((reveiws) => {
-            console.log(`\n⭐ Reviews for $({product.name} (ID:${product.id}):`, reveiws);
+            console.log(`\n⭐ Reviews for ${product.name} (ID: ${product.id}):`, reveiws);
         })
         .catch((error) => {
             if (error instanceof DataError) {
-            console.error(`[Data Issue] $({error.name}:${error.message}`);
+            console.error(`[Data Issue] ${error.name}: ${error.message}`);
           } else {
             console.error(`[Review Error]:`, error);
           }
