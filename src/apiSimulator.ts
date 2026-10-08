@@ -61,11 +61,3 @@ export const fetchSalesReport = () =>{
     });
 };
 
-console.log('testing fetchproductcatalog..');
-fetchProductCatalog()
-.then((products) =>{
-    console.log('success product recuved',products);
-})
-.catch((error) => {
-    console.error("Caught an error:", error);
-  });
